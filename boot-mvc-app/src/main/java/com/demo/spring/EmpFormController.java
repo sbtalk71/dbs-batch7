@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +21,9 @@ public class EmpFormController {
 
 	@Autowired
 	private EmpRepository repo;
+	
+	@Autowired
+	EmpFormValidator validator;
 
 	@RequestMapping(path = "/regform", method = RequestMethod.GET)
 	public String getTheForm(Model model) {
@@ -29,12 +33,18 @@ public class EmpFormController {
 	}
 
 	@RequestMapping(path = "/regform", method = RequestMethod.POST)
-	public ModelAndView processForm(@ModelAttribute("emp") Emp emp) {
+	public ModelAndView processForm(@ModelAttribute("emp") Emp emp,BindingResult errors) {
 		ModelAndView mv = new ModelAndView();
+		validator.validate(emp, errors);
+		if(!errors.hasErrors()) {
 		Emp e1 = repo.save(emp);
 		mv.addObject("savedEmp", e1);
 		mv.setViewName("success");
 		return mv;
+		}else {
+			mv.setViewName("regform");
+			return mv;
+		}
 	}
 
 	@RequestMapping(path = "/find", method = RequestMethod.POST)

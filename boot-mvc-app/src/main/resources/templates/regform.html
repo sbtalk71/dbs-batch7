@@ -13,18 +13,22 @@
 			<tr>
 				<td>Emp ID</td>
 				<td><input type="text" th:field=*{empId}></td>
+				<td><span th:errors="*{empId}"></span></td>
 			</tr>
 			<tr>
 				<td>Name</td>
 				<td><input type="text" th:field=*{name}></td>
+				<td><span th:errors="*{name}"></span></td>
 			</tr>
 			<tr>
 				<td>City</td>
 				<td><input type="text" th:field=*{city}></td>
+				<td><span th:errors="*{city}"></span></td>
 			</tr>
 			<tr>
 				<td>Salary</td>
 				<td><input type="text" th:field=*{salary}></td>
+				<td><span th:errors="*{salary}"></span></td>
 			</tr>
 			<tr><td colspan="2" align="center"><input type="submit" value="Submit"></td></tr>
 		</table>
