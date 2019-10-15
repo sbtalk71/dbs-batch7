@@ -41,10 +41,8 @@ public class EmpFormController {
 	public ModelAndView processForm(@RequestParam("empId") int id) {
 		System.out.println(":::::::::: " + id);
 		ModelAndView mv = new ModelAndView();
-		if (repo.existsById(id)) {
-
-			Optional<Emp> o = repo.findById(id);
-
+		Optional<Emp> o = repo.findById(id);
+		if (o.isPresent()) {
 			mv.addObject("emp", o.get());
 			mv.setViewName("success");
 			return mv;
@@ -55,13 +53,14 @@ public class EmpFormController {
 		}
 
 	}
-	@RequestMapping(path="/list",method = RequestMethod.GET)
+
+	@RequestMapping(path = "/list", method = RequestMethod.GET)
 	public ModelAndView getList() {
 		ModelAndView mv = new ModelAndView();
-		List<Emp> emps=repo.findAll();
+		List<Emp> emps = repo.findAll();
 		mv.setViewName("emp_list");
-		mv.addObject("empList",emps);
-	return mv;
+		mv.addObject("empList", emps);
+		return mv;
 	}
 
 }
