@@ -16,5 +16,6 @@ public class BootMvcAppApplication implements WebMvcConfigurer{
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/findemp").setViewName("finder");
+		registry.addViewController("/").setViewName("main_page");
 	}
 }

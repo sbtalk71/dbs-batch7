@@ -1,5 +1,6 @@
 package com.demo.spring;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.spring5.expression.Mvc;
 
 import com.demo.spring.entity.Emp;
 
@@ -37,7 +39,7 @@ public class EmpFormController {
 
 	@RequestMapping(path = "/find", method = RequestMethod.POST)
 	public ModelAndView processForm(@RequestParam("empId") int id) {
-		System.out.println(":::::::::: "+id);
+		System.out.println(":::::::::: " + id);
 		ModelAndView mv = new ModelAndView();
 		if (repo.existsById(id)) {
 
@@ -47,8 +49,19 @@ public class EmpFormController {
 			mv.setViewName("success");
 			return mv;
 		} else {
-			throw new RuntimeException();
+			mv.setViewName("not_found");
+
+			return mv;
 		}
 
 	}
+	@RequestMapping(path="/list",method = RequestMethod.GET)
+	public ModelAndView getList() {
+		ModelAndView mv = new ModelAndView();
+		List<Emp> emps=repo.findAll();
+		mv.setViewName("emp_list");
+		mv.addObject("empList",emps);
+	return mv;
+	}
+
 }
