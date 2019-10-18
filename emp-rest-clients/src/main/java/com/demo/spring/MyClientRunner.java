@@ -1,5 +1,6 @@
 package com.demo.spring;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,8 @@ public class MyClientRunner implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		RestTemplate rt = new RestTemplate();
+		String credText="shantanu:welcome1";
+		String encodedCred=new String(Base64.encodeBase64(credText.getBytes()));
 
 		// ResponseEntity<String>
 		// response=rt.getForEntity("http://localhost:8080/emp/find/104", String.class);
@@ -24,27 +27,31 @@ public class MyClientRunner implements CommandLineRunner {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+		headers.add("Authorization", "Basic "+encodedCred);
 		
 	
 
+		
+		  HttpEntity req = new HttpEntity<>(headers);
+		  
+		  ResponseEntity<String> response1 =
+		  rt.exchange("http://localhost:8080/emp/find/104", HttpMethod.GET, req,
+		  String.class);
+		  
+		  System.out.println(response1.getBody());
+		 
+
 		/*
-		 * HttpEntity req = new HttpEntity<>(headers);
+		 * Emp emp = new Emp(222, "Kishan", "Hyderabad", 87000);
 		 * 
-		 * ResponseEntity<String> response1 =
-		 * rt.exchange("http://localhost:8080/emp/find/104", HttpMethod.GET, req,
+		 * HttpEntity req1 = new HttpEntity<>(emp, headers);
+		 * 
+		 * ResponseEntity<String> response2 =
+		 * rt.exchange("http://localhost:8080/emp/save", HttpMethod.POST, req1,
 		 * String.class);
 		 * 
-		 * System.out.println(response1.getBody());
+		 * System.out.println(response2.getBody());
 		 */
-
-		Emp emp = new Emp(222, "Kishan", "Hyderabad", 87000);
-
-		HttpEntity req1 = new HttpEntity<>(emp, headers);
-
-		ResponseEntity<String> response2 = rt.exchange("http://localhost:8080/emp/save", HttpMethod.POST, req1,
-				String.class);
-
-		System.out.println(response2.getBody());
 	}
 
 }
